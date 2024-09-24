@@ -30,8 +30,9 @@ import (
 */
 
 func genMd5(code string) string {
-	Md5 := md5.New()
-	_, _ = io.WriteString(Md5, code)
+	// 生成md5实例
+	Md5 := md5.New() 
+	_, _ = io.WriteString(Md5, code) // 将字符串写入到Md5哈希对象中
 
 	return hex.EncodeToString(Md5.Sum(nil))
 }
