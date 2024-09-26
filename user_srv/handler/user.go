@@ -24,9 +24,9 @@ func (s *UserServer) GetUserList(ctx context.Context, req *proto.PageInfo) (*pro
 
 	// 创建响应消息
 	rsp := &proto.UserListResponse{}
-	rsp.Total = int32(result.RowsAffected)
+	rsp.Total = int32(result.RowsAffected) // 因为 user.proto 文件中定义的类型是int32
 
-	global.DB.Scopes(Paginate(int(req.Pn), int(req.PSize))).Find(&users)
+	global.DB.Scopes(Paginate(int(req.Pn), int(req.PSize))).Find(&users) // 分页查询
 
 	for _, user := range users {
 		userInfoRsp := ModelToResponse(user)
@@ -34,6 +34,7 @@ func (s *UserServer) GetUserList(ctx context.Context, req *proto.PageInfo) (*pro
 	}
 	return rsp, nil
 }
+
 func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	// gorm分页
 	return func(db *gorm.DB) *gorm.DB {
@@ -68,3 +69,10 @@ func ModelToResponse(user model.User) proto.UserInfoResponse {
 	}
 	return userInfoRsp
 }
+
+/*
+定义了 UserServer 结构体，并实现了 GetUserList 方法，该方法用于从数据库中获取用户列表并返回分页的用户数据。
+辅助函数 Paginate 和 ModelToResponse 来帮助处理分页和模型到响应消息的转换
+
+req *proto.PageInfo：一个指向 PageInfo 消息类型的指针，包含了分页信息（如页码 Pn 和每页大小 PSize）
+*/

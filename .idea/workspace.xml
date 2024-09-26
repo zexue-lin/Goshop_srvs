@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="183b336e-6d87-49b0-aa2c-e375ed24c68b" name="更改" comment="9-24分页功能">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_srv/global/global.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_srv/handler/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_srv/proto/user.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_srv/proto/user.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_srv/model/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_srv/model/main/main.go" afterDir="false" />
-    </list>
+    <list default="true" id="183b336e-6d87-49b0-aa2c-e375ed24c68b" name="更改" comment="9-24分页功能" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
