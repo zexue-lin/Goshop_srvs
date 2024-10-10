@@ -2,10 +2,13 @@ package handler
 
 import (
 	"context"
-	"gorm.io/gorm"
 	"goshop_srvs/user_srv/global"
 	"goshop_srvs/user_srv/model"
 	"goshop_srvs/user_srv/proto"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	"gorm.io/gorm"
 )
 
 // 只需要实现user.proto里的方法即可
@@ -13,28 +16,30 @@ import (
 
 type UserServer struct{}
 
+// 方法1 查询用户-用户列表
 // 指向 UserServer 结构体的指针;第二个参数PageInfo 消息类型的指针;返回值是一个指向 UserListResponse 消息类型的指针和一个错误
 func (s *UserServer) GetUserList(ctx context.Context, req *proto.PageInfo) (*proto.UserListResponse, error) {
-	// 获取用户列表
+	// 获取用户列表（所有）
 	var users []model.User
-	result := global.DB.Find(&users)
+	result := global.DB.Find(&users) // gorm查询所有用户
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	// 创建响应消息
+	// 开始构建返回，创建响应消息
 	rsp := &proto.UserListResponse{}
 	rsp.Total = int32(result.RowsAffected) // 因为 user.proto 文件中定义的类型是int32
 
 	global.DB.Scopes(Paginate(int(req.Pn), int(req.PSize))).Find(&users) // 分页查询
 
 	for _, user := range users {
-		userInfoRsp := ModelToResponse(user)
+		userInfoRsp := ModelToResponse(user) // 将这里users里面取出的model对象转换成文件user.pb.go里的UserListResponse对象
 		rsp.Data = append(rsp.Data, &userInfoRsp)
 	}
 	return rsp, nil
 }
 
+// 分页
 func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	// gorm分页
 	return func(db *gorm.DB) *gorm.DB {
@@ -54,9 +59,10 @@ func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
+// 将查出来的对象转成proto里的对象
 func ModelToResponse(user model.User) proto.UserInfoResponse {
 	// 在grpc的message字段中，如果有默认值不能随便赋值nil，容易出错
-	// 要搞清哪些有默认值
+	// 要搞清哪些有默认值，birthday注册的时候可能是nil，
 	userInfoRsp := proto.UserInfoResponse{
 		Id:       user.ID,
 		Password: user.Password,
@@ -65,7 +71,7 @@ func ModelToResponse(user model.User) proto.UserInfoResponse {
 		Role:     int32(user.Role),
 	}
 	if user.Birthday != nil {
-		userInfoRsp.Birthday = uint64(user.Birthday.Unix())
+		userInfoRsp.Birthday = uint64(user.Birthday.Unix()) // 得到Unix时间戳转换为uint64赋值给birthday
 	}
 	return userInfoRsp
 }
@@ -76,3 +82,56 @@ func ModelToResponse(user model.User) proto.UserInfoResponse {
 
 req *proto.PageInfo：一个指向 PageInfo 消息类型的指针，包含了分页信息（如页码 Pn 和每页大小 PSize）
 */
+// 方法2 根据手机号查询用户
+func (s *UserServer) GetUserByMobile(ctx context.Context, req *proto.MobileRequest) (*proto.UserInfoResponse, error) {
+	var user model.User
+	// gorm的基础理解，这句sql相当于：条件 where 模型定义的Mobile = req.Mobile
+	// 最终 SQL 类似于：SELECT * FROM users WHERE mobile = 'xxxx' LIMIT 1;
+	result := global.DB.Where(&model.User{Mobile: req.Mobile}).First(&user)
+	if result.RowsAffected == 0 {
+		return nil, status.Errorf(codes.NotFound, "用户不存在")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	userInfoRsp := ModelToResponse(user)
+	return &userInfoRsp, nil
+}
+
+// 通过id查询用户
+func (s *UserServer) GetUserById(ctx context.Context, req *proto.IdRequest) (*proto.UserInfoResponse, error) {
+	var user model.User
+
+	result := global.DB.First(&user, req.Id)
+	if result.RowsAffected == 0 {
+		return nil, status.Errorf(codes.NotFound, "用户不存在")
+	}
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	userInfoRsp := ModelToResponse(user)
+	return &userInfoRsp, nil
+}
+
+// 新建用户
+func (s *UserServer) CreateUser(ctx context.Context, req *proto.CreateUserInfo) (*proto.UserInfoResponse, error) {
+	// 严谨的做法: 新建之前先查询一下用户是否已经存在
+	var user model.User
+	result := global.DB.Where(&model.User{Mobile: req.Mobile}).First(&user)
+  if result.RowsAffected==1{
+    return nil,status.Errorf(codes.AlreadyExists,"用户已存在")
+  }
+
+  user.Mobile =req.Mobile
+  user.NickName =req.NickName
+
+  // 密码加密
+  options := &password.Options{16, 100, 32, sha512.New}
+	salt, encodedPwd := password.Encode("generic password", options)
+	newPassword := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd) // 密码字符串三个部分，算法，盐值，真正的密码密码
+
+	fmt.Println(len(newPassword)) // 要确保长度不能超过100，否则保存到数据库会被截断
+
+}

@@ -80,6 +80,7 @@ func main() {
 	newPassword := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd) // 密码字符串三个部分，算法，盐值，真正的密码密码
 
 	fmt.Println(len(newPassword)) // 要确保长度不能超过100，否则保存到数据库会被截断
+	fmt.Println("newPassword=",newPassword) 
 
 	passwordInfo := strings.Split(newPassword, "$")
 	fmt.Println(passwordInfo)

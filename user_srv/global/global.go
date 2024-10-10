@@ -15,7 +15,7 @@ var (
 	DB *gorm.DB
 )
 
-// init() 会自动执行
+// import的时候，init()方法会自动执行，不用显式的调用它
 func init() {
 	dsn := "root:root@tcp(127.0.0.1:3306)/goshop_user_srv?charset=utf8mb4&parseTime=True&loc=Local"
 

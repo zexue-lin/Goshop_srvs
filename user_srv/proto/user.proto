@@ -3,6 +3,7 @@ import "google/protobuf/empty.proto"; // 定义了一个空消息类型
 option go_package = ".;proto";
 
 // gRPC 服务接口 下面是接口
+// 后台管理系统的接口
 service User{
   rpc GetUserList(PageInfo) returns (UserListResponse); // 用户的列表
   rpc GetUserByMobile(MobileRequest) returns(UserInfoResponse); // 通过mobile查询用户
@@ -59,5 +60,5 @@ message UserInfoResponse{
 
 message UserListResponse{
   int32 total=1;
-  repeated UserInfoResponse data =2;
+  repeated UserInfoResponse data =2; // 内嵌的List类型
 }
