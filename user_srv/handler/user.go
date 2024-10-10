@@ -2,10 +2,16 @@ package handler
 
 import (
 	"context"
+	"crypto/sha512"
+	"fmt"
 	"goshop_srvs/user_srv/global"
 	"goshop_srvs/user_srv/model"
 	"goshop_srvs/user_srv/proto"
+	"strings"
+	"time"
 
+	"github.com/anaskhan96/go-password-encoder"
+	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
@@ -120,18 +126,53 @@ func (s *UserServer) CreateUser(ctx context.Context, req *proto.CreateUserInfo) 
 	// 严谨的做法: 新建之前先查询一下用户是否已经存在
 	var user model.User
 	result := global.DB.Where(&model.User{Mobile: req.Mobile}).First(&user)
-  if result.RowsAffected==1{
-    return nil,status.Errorf(codes.AlreadyExists,"用户已存在")
-  }
+	if result.RowsAffected == 1 {
+		return nil, status.Errorf(codes.AlreadyExists, "用户已存在")
+	}
 
-  user.Mobile =req.Mobile
-  user.NickName =req.NickName
+	user.Mobile = req.Mobile
+	user.NickName = req.NickName
 
-  // 密码加密
-  options := &password.Options{16, 100, 32, sha512.New}
-	salt, encodedPwd := password.Encode("generic password", options)
-	newPassword := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd) // 密码字符串三个部分，算法，盐值，真正的密码密码
+	// 密码加密
+	options := &password.Options{16, 100, 32, sha512.New}
+	salt, encodedPwd := password.Encode(req.Password, options)
+	user.Password = fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd)
 
-	fmt.Println(len(newPassword)) // 要确保长度不能超过100，否则保存到数据库会被截断
+	result = global.DB.Create(&user)
+	if result.Error != nil {
+		return nil, status.Errorf(codes.Internal, result.Error.Error())
+	}
 
+	userInfoRsp := ModelToResponse(user)
+	return &userInfoRsp, nil
+}
+
+// 个人中心更新用户
+func (s *UserServer) UpdateUser(ctx context.Context, req *proto.UpdateUserInfo) (*empty.Empty, error) {
+	var user model.User
+	result := global.DB.First(&user, req.Id)
+	if result.RowsAffected == 0 {
+		return nil, status.Errorf(codes.NotFound, "用户不存在")
+	}
+
+	// 如果将一个int类型转换成一个Time类型，重点是时间转换
+	birthday := time.Unix(int64(req.Birthday), 0)
+	user.NickName = req.NickName
+	user.Birthday = &birthday // 是一个指针类型
+	user.Gender = req.Gender
+
+	result = global.DB.Save(user)
+	if result.Error != nil {
+		return nil, status.Errorf(codes.Internal, result.Error.Error())
+	}
+	return &empty.Empty{}, nil
+}
+
+// 检查用户密码
+func (s *UserServer) CheckPassword(ctx context.Context, req *proto.PasswordCheckInfo) (*proto.CheckResponse, error) {
+	options := &password.Options{16, 100, 32, sha512.New}
+	passwordInfo := strings.Split(req.EncryptedPassword, "$")
+
+	check := password.Verify(req.Password, passwordInfo[2], passwordInfo[3], options) // 第0个是空格，第2个是salt
+	return &proto.CheckResponse{Success: check}, nil
 }
