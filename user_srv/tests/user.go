@@ -48,12 +48,37 @@ func TestGetUserList() {
 		}
 		fmt.Println(checkRsp.Success)
 	}
-
-
 }
 
+func TestCreateUser() {
+	for i := 0; i < 10; i++ {
+		rsp, err := userClient.CreateUser(context.Background(), &proto.CreateUserInfo{
+			NickName: fmt.Sprintf("tom%d", i),
+			Mobile:   fmt.Sprintf("1576543211%d", i),
+			Password: "admin123",
+		})
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(rsp.Id)
+	}
+}
+
+func TestGetUserByMobile() {
+	rsp, err := userClient.GetUserByMobile(context.Background(), &proto.MobileRequest{
+		Mobile: "15765432111",
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(rsp.NickName)
+}
+
+// 接口测试
 func main() {
 	Init()
-	TestGetUserList()
+	//TestGetUserList()
+	//TestCreateUser()
+	TestGetUserByMobile()
 	conn.Close()
 }

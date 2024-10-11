@@ -5,14 +5,14 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"fmt"
+	"github.com/anaskhan96/go-password-encoder"
+	"goshop_srvs/user_srv/model"
 	_ "goshop_srvs/user_srv/model"
 	"io"
 	"log"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/anaskhan96/go-password-encoder"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -31,7 +31,7 @@ import (
 
 func genMd5(code string) string {
 	// 生成md5实例
-	Md5 := md5.New() 
+	Md5 := md5.New()
 	_, _ = io.WriteString(Md5, code) // 将字符串写入到Md5哈希对象中
 
 	return hex.EncodeToString(Md5.Sum(nil))
@@ -54,7 +54,7 @@ func main() {
 	)
 
 	// 全局模式
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 使用结构体的单数形式作为表名，而不是默认的复数形式。
 		},
@@ -64,26 +64,27 @@ func main() {
 		panic(err)
 	}
 
-	// _ = db.AutoMigrate(&model.User{})
-
-	// fmt.Println(genMd5("123456"))
-	// e10adc3949ba59abbe56e057f20f883e
-
-	// salt, encodedPwd := password.Encode("generic password", nil)
-	// fmt.Println(salt)
-	// fmt.Println(encodedPwd)
-	// check := password.Verify("generic password", salt, encodedPwd, nil)
-	// fmt.Println(check) // true
-
 	options := &password.Options{16, 100, 32, sha512.New}
-	salt, encodedPwd := password.Encode("generic password", options)
+	salt, encodedPwd := password.Encode("admin123", options)
 	newPassword := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd) // 密码字符串三个部分，算法，盐值，真正的密码密码
 
-	fmt.Println(len(newPassword)) // 要确保长度不能超过100，否则保存到数据库会被截断
-	fmt.Println("newPassword=",newPassword) 
+	// fmt.Println(len(newPassword)) // 要确保长度不能超过100，否则保存到数据库会被截断
 
-	passwordInfo := strings.Split(newPassword, "$")
-	fmt.Println(passwordInfo)
-	check := password.Verify("generic password", passwordInfo[2], passwordInfo[3], options) // 第0个是空格，第2个是salt
-	fmt.Println(check)                                                                      // true
+	for i := 0; i < 10; i++ {
+		user := model.User{
+			NickName: fmt.Sprintf("tom%d", i),
+			Mobile:   fmt.Sprintf("1576543211%d", i),
+			Password: newPassword,
+		}
+		db.Save(&user)
+	}
+
+	//_ = db.AutoMigrate(&model.User{})
+
+	//fmt.Println("newPassword=", newPassword)
+	//
+	//passwordInfo := strings.Split(newPassword, "$")
+	//fmt.Println(passwordInfo)
+	//check := password.Verify("generic password", passwordInfo[2], passwordInfo[3], options) // 第0个是空格，第2个是salt
+	//fmt.Println(check)                                                                      // true
 }
