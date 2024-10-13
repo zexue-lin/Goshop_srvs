@@ -74,6 +74,7 @@ func ModelToResponse(user model.User) proto.UserInfoResponse {
 		Password: user.Password,
 		NickName: user.NickName,
 		Gender:   user.Gender,
+		Mobile:   user.Mobile,
 		Role:     int32(user.Role),
 	}
 	if user.Birthday != nil {

@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="183b336e-6d87-49b0-aa2c-e375ed24c68b" name="更改" comment="9-24分页功能">
-      <change afterPath="$PROJECT_DIR$/goods_srvs/global/global.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/handler/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/model/base.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/model/goods.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/model/main/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/proto/user.pb.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/proto/user.proto" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/goods_srvs/tests/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user_srv/main.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user_srv/handler/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_srv/handler/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_srv/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_srv/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_srv/model/main/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_srv/model/main/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user_srv/tests/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/user_srv/tests/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +20,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://$PROJECT_DIR$/../../.." />
+  <component name="GOROOT" url="file://E:/Go1.23.0" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -62,32 +49,32 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultGoTemplateProperty": "Go File",
-    "Go 构建.go build goshop_srvs/user_srv.executor": "Run",
-    "Go 构建.go build main.go (1).executor": "Run",
-    "Go 构建.go build main.go.executor": "Run",
-    "Go 构建.go build user.go (1).executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "false",
-    "git-widget-placeholder": "master",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/Go1.23.0/A-Go_workspace/Go-Learn/goshop_srvs/goods_srvs",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go 构建.go build goshop_srvs/user_srv.executor&quot;: &quot;Run&quot;,
+    &quot;Go 构建.go build main.go (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go 构建.go build main.go.executor&quot;: &quot;Run&quot;,
+    &quot;Go 构建.go build user.go (1).executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Depository/Golang-Learn/goshop_api&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Go 构建.go build user.go (1)">
+}</component>
+  <component name="RunManager" selected="Go 构建.go build main.go (1)">
     <configuration name="go build goshop_srvs/user_srv" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="goshop_srvs" />
       <working_directory value="$PROJECT_DIR$" />
@@ -135,9 +122,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go 构建.go build user.go (1)" />
         <item itemvalue="Go 构建.go build main.go (1)" />
         <item itemvalue="Go 构建.go build main.go" />
+        <item itemvalue="Go 构建.go build user.go (1)" />
         <item itemvalue="Go 构建.go build user.go" />
         <item itemvalue="Go 构建.go build goshop_srvs/user_srv" />
       </list>
@@ -146,8 +133,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-gosdk-33c477a475b1-e0158606a674-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.18968.32" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-GO-241.18968.32" />
+        <option value="bundled-gosdk-5df93f7ad4aa-dfc284eb1eb8-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-242.20224.306" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-GO-242.20224.306" />
       </set>
     </attachedChunks>
   </component>
